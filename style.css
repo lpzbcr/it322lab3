@@ -1,0 +1,196 @@
+body {
+  background-image: url('bisu.png'); /* Replace with your image */
+  background-size:cover;
+  background-color: #86838F   ;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150vh;
+
+  
+}
+.login-container {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  text-align: center;
+}
+input {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+button {
+  width: 90%;
+  padding: 10px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background: darkgray;
+}
+a {
+  display: block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: blue;
+}
+
+
+@media (max-width: 480px) {
+    h1 {
+      font-size: 2rem; /* Reduce heading size for better readability on small screens */
+    }
+  
+    .home {
+      flex-direction: column; /* Stack home section content vertically */
+      padding: 1rem; /* Add padding for consistent spacing */
+    }
+  
+    .home-left h2 {
+      font-size: 2rem; /* Resize secondary headings */
+    }
+  
+    .home-left p {
+      font-size: 1.2rem; /* Adjust paragraph text size for readability */
+    }
+  
+    .home-right img {
+      width: 6rem; /* Resize images to fit smaller screens */
+      height: 6rem;
+    }
+  
+    .about-box {
+      flex-direction: column; /* Stack about box content vertically */
+      padding: 2rem; /* Add padding for spacing */
+    }
+  
+    .project-box {
+      grid-template-columns: 1fr; /* Display projects in a single column */
+      padding: 1rem; /* Add padding for consistent spacing */
+    }
+  }
+  
+  /* Small Tablets (portrait and landscape) */
+  /* Apply styles for devices with a maximum width of 768px */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.25rem; /* Slightly larger heading size compared to mobile */
+    }
+  
+    #menu-icon {
+      display: block; /* Show menu icon for mobile navigation */
+    }
+    .navbar {
+      position: absolute; /* Overlay the navigation menu */
+      top: 100%; /* Position the menu below the header */
+      left: 0;
+      width: 50%; /* Use half the viewport width for the menu */
+      padding: 1rem 3%; /* Add padding for spacing */
+      background: #dd955a; /* Apply background color to navbar */
+      display: none; /* Initially hide the menu */
+    }
+    .navbar.active {
+      display: block; /* Show navbar when active */
+    }
+    .navbar a {
+      display: block; /* Stack links vertically */
+      font-size: 2rem; /* Increase font size for better usability */
+      margin: 3rem 0; /* Add spacing between links */
+    }
+  
+    .home {
+      flex-direction: column; /* Stack home section content vertically */
+      padding: 2rem; /* Add padding for larger spacing */
+    }
+  
+    .home-left h2 {
+      font-size: 2.2rem; /* Resize secondary headings */
+    }
+  
+    .home-left p {
+      font-size: 1.4rem; /* Adjust paragraph text size for readability */
+    }
+  
+    .home-right img {
+      width: 7rem; /* Resize images for larger tablets */
+      height: 7rem;
+    }
+  
+    .project-box {
+      grid-template-columns: 1fr !important; /* Force projects into a single column */
+      padding: 1rem; /* Add padding for spacing */
+    }
+  
+    .project-box .project-information {
+      max-width: 100%; /* Prevent content from exceeding the container width */
+      padding: 1rem; /* Add padding for consistent layout */
+    }
+  
+    .contact form {
+      flex-direction: column; /* Stack form elements vertically */
+    }
+  
+    .footer {
+      padding: 1.5rem; /* Adjust footer padding for smaller devices */
+    }
+  }
+  
+  /* Medium Devices (landscape tablets and small laptops) */
+  /* Styles for devices with a maximum width of 1024px */
+  @media (max-width: 1024px) {
+    h1 {
+      font-size: 2.5rem; /* Slightly larger heading size */
+    }
+  
+    .navbar a {
+      font-size: 1.5rem; /* Reduce link font size for mid-sized screens */
+    }
+  
+    .home-left h2 {
+      font-size: 2.5rem; /* Adjust secondary heading size */
+    }
+  
+    .home-left p {
+      font-size: 1.5rem; /* Resize paragraph text for readability */
+    }
+  
+    .project-box {
+      grid-template-columns: 1fr 1fr; /* Arrange projects in two columns */
+    }
+  }
+  
+  /* Large Screens (Desktops) */
+  /* Styles for devices with a minimum width of 1200px */
+  @media (min-width: 1200px) {
+    .home {
+      flex-direction: row; /* Align home section content horizontally */
+      padding: 3rem; /* Add larger padding for spacious layout */
+    }
+  
+    .about-box {
+      padding: 4rem 2rem; /* Increase padding for about box */
+    }
+  
+    .project-box {
+      grid-template-columns: repeat(
+        3,
+        1fr
+      ); /* Arrange projects in three columns */
+    }
+  
+    .footer {
+      padding: 3rem; /* Add larger padding for the footer */
+    }
+  }
+  
+
+  
