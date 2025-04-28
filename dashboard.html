@@ -1049,250 +1049,250 @@ function deleteDeduction(id) {
     .catch(error => alert("Fetch error: " + error));
 }
 
-// async function fetchAttendanceAndCalculatePayroll() {
-//     try {
-//         let attendanceData = await fetchAttendanceData();
-//         let deductionsData = await fetchDeductionsData();
-
-//         // Debug: Log the fetched data
-//         console.log("Attendance Data:", attendanceData);
-//         console.log("Deductions Data:", deductionsData);
-
-//         calculatePayroll(attendanceData, deductionsData);
-//     } catch (error) {
-//         console.error("Error fetching and calculating payroll:", error);
-//     }
-// }
-
-// function calculatePayroll(attendanceData, deductionsData) {
-//     let payrollTableBody = document.querySelector("#payrollTable tbody");
-//     if (!payrollTableBody) {
-//         console.error("Payroll table body not found in the DOM.");
-//         return;
-//     }
-//     payrollTableBody.innerHTML = ""; // Clear previous data
-
-//     attendanceData.forEach(attendance => {
-//         let emp_id = attendance.id;
-//         let emp_name = attendance.name;
-//         let emp_timeIn = attendance.time_in;
-//         let emp_timeOut = attendance.time_out;
-
-//         let hoursWorked = calculateHoursWorked(emp_timeIn, emp_timeOut);
-//         let hour_rate = 150; // Example hourly rate
-//         let daily_rate = 1200; // Example daily rate
-
-//         // Calculate gross pay based on hours worked or daily rate
-//         let gross_pay = hoursWorked > 0 ? hoursWorked * hour_rate : daily_rate;
-
-//         // Calculate total deductions for the employee
-//         let employeeDeductions = deductionsData.filter(deduction => deduction.id === emp_id);
-//         console.log(`Deductions for Employee ID ${emp_id}:`, employeeDeductions); // Debug: Log deductions for the employee
-
-//         let deduction = employeeDeductions.reduce((sum, deduction) => {
-//             let amount = parseFloat(deduction.amount);
-//             if (isNaN(amount)) {
-//                 console.warn(`Invalid deduction amount for ID ${emp_id}:`, deduction.amount);
-//                 amount = 0;
-//             }
-//             return sum + amount;
-//         }, 0);
-
-//         // Debug: Log the calculated values
-//         console.log(`Employee ID: ${emp_id}, Gross Pay: ${gross_pay}, Total Deductions: ${deduction}`);
-
-//         let net_pay = gross_pay - deduction;
-
-//         let row = `<tr>
-//             <td>${emp_id}</td>
-//             <td>${emp_name}</td>
-//             <td>₱${daily_rate.toFixed(2)}</td>
-//             <td>₱${hour_rate.toFixed(2)}</td>
-//             <td>₱${gross_pay.toFixed(2)}</td> <!-- Gross Pay now here -->
-//             <td>₱${deduction.toFixed(2)}</td> <!-- Deductions now here -->
-//             <td>₱${net_pay.toFixed(2)}</td>
-//         </tr>`;
-//         payrollTableBody.innerHTML += row;
-//     });
-// }
-
-// async function fetchAttendanceData() {
-//     try {
-//         let response = await fetch("fetch_attendance.php");
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! Status: ${response.status}`);
-//         }
-//         let attendanceData = await response.json();
-//         if (attendanceData.error) {
-//             throw new Error(attendanceData.error);
-//         }
-//         return attendanceData;
-//     } catch (error) {
-//         console.error("Error fetching attendance data:", error);
-//         return [];
-//     }
-// }
-
-// async function fetchDeductionsData() {
-//     try {
-//         let response = await fetch("fetch_deduction.php");
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! Status: ${response.status}`);
-//         }
-//         let text = await response.text();
-//         console.log("Raw response:", text); // Log the raw response
-//         let deductionsData = JSON.parse(text);
-//         if (!Array.isArray(deductionsData)) {
-//             throw new Error("Deductions data is not an array");
-//         }
-//         return deductionsData;
-//     } catch (error) {
-//         console.error("Error fetching deductions data:", error);
-//         return [];
-//     }
-// }
-
-// function calculateHoursWorked(timeIn, timeOut) {
-//     if (!timeOut || timeOut.toLowerCase() === "null") return 0; // Handle missing time-out
-
-//     let start = new Date(`2025-01-01T${timeIn}`); // Use a fixed date with time
-//     let end = new Date(`2025-01-01T${timeOut}`);
-
-//     let hoursWorked = (end - start) / (1000 * 60 * 60); // Convert milliseconds to hours
-//     return hoursWorked > 0 ? hoursWorked : 0;
-// }
-
-// // Call the function when the page loads
-// document.addEventListener("DOMContentLoaded", fetchAttendanceAndCalculatePayroll);
-
 async function fetchAttendanceAndCalculatePayroll() {
-  try {
-    const attendanceData = await fetchAttendanceData();
-    const deductionsData = await fetchDeductionsData();
+    try {
+        let attendanceData = await fetchAttendanceData();
+        let deductionsData = await fetchDeductionsData();
 
-    // Debug: Log the fetched data
-    console.log("Attendance Data:", attendanceData);
-    console.log("Deductions Data:", deductionsData);
+        // Debug: Log the fetched data
+        console.log("Attendance Data:", attendanceData);
+        console.log("Deductions Data:", deductionsData);
 
-    calculatePayroll(attendanceData, deductionsData);
-  } catch (error) {
-    console.error("Error fetching and calculating payroll:", error);
-  }
+        calculatePayroll(attendanceData, deductionsData);
+    } catch (error) {
+        console.error("Error fetching and calculating payroll:", error);
+    }
 }
 
 function calculatePayroll(attendanceData, deductionsData) {
-  const payrollTableBody = document.querySelector("#payrollTable tbody");
-  if (!payrollTableBody) {
-    console.error("Payroll table body not found in the DOM.");
-    return;
-  }
+    let payrollTableBody = document.querySelector("#payrollTable tbody");
+    if (!payrollTableBody) {
+        console.error("Payroll table body not found in the DOM.");
+        return;
+    }
+    payrollTableBody.innerHTML = ""; // Clear previous data
 
-  payrollTableBody.innerHTML = ""; // Clear previous data
+    attendanceData.forEach(attendance => {
+        let emp_id = attendance.id;
+        let emp_name = attendance.name;
+        let emp_timeIn = attendance.time_in;
+        let emp_timeOut = attendance.time_out;
 
-  attendanceData.forEach((attendance) => {
-    const emp_id = attendance.id;
-    const emp_name = attendance.name;
-    const emp_timeIn = attendance.time_in;
-    const emp_timeOut = attendance.time_out;
+        let hoursWorked = calculateHoursWorked(emp_timeIn, emp_timeOut);
+        let hour_rate = 150; // Example hourly rate
+        let daily_rate = 1200; // Example daily rate
 
-    const hour_rate = 150; // Example hourly rate
-    const daily_rate = 1200; // Example daily rate
-    const hoursWorked = calculateHoursWorked(emp_timeIn, emp_timeOut);
+        // Calculate gross pay based on hours worked or daily rate
+        let gross_pay = hoursWorked > 0 ? hoursWorked * hour_rate : daily_rate;
 
-    // Declare gross_pay here so it's available for net_pay
-    const gross_pay = hoursWorked > 0 ? hoursWorked * hour_rate : daily_rate;
+        // Calculate total deductions for the employee
+        let employeeDeductions = deductionsData.filter(deduction => deduction.id === emp_id);
+        console.log(`Deductions for Employee ID ${emp_id}:`, employeeDeductions); // Debug: Log deductions for the employee
 
-    // Get total deductions for this employee
-    const Deductions = deductionsData.filter(
-      (deduction) => deduction.id === emp_id
-    );
-    console.log(`Deductions for Employee ID ${emp_id}:, Deductions`); // Debug
+        let deduction = employeeDeductions.reduce((sum, deduction) => {
+            let amount = parseFloat(deduction.amount);
+            if (isNaN(amount)) {
+                console.warn(`Invalid deduction amount for ID ${emp_id}:`, deduction.amount);
+                amount = 0;
+            }
+            return sum + amount;
+        }, 0);
 
-    const deduction = Deductions.reduce((sum, deduction) => {
-      let amount = parseFloat(deduction.amount);
-      if (isNaN(amount)) {
-        console.warn(
-          `Invalid deduction amount for ID ${emp_id}:,
-          deduction.amount`
-        );
-        amount = 50;
-      }
-      return sum + amount;
-    }, 50);
+        // Debug: Log the calculated values
+        console.log(`Employee ID: ${emp_id}, Gross Pay: ${gross_pay}, Total Deductions: ${deduction}`);
 
-    // Calculate net pay
-    const net_pay = gross_pay - deduction;
+        let net_pay = gross_pay - deduction;
 
-    // Debug log
-    console.log(
-      `Employee ID: ${emp_id}, Gross Pay: ${gross_pay}, Total Deductions: ${deduction}`
-    );
-
-    // Create a row dynamically and append it to the table
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-        <td>${emp_id}</td>
-        <td>${emp_name}</td>
-        <td>₱${daily_rate.toFixed(2)}</td>
-        <td>₱${hour_rate.toFixed(2)}</td>
-        <td>₱${gross_pay.toFixed(2)}</td>
-        <td>₱${deduction.toFixed(2)}</td> <!-- Display deduction -->
-        <td>₱${net_pay.toFixed(2)}</td>
-    `;
-
-    payrollTableBody.appendChild(row);
-  });
+        let row = `<tr>
+            <td>${emp_id}</td>
+            <td>${emp_name}</td>
+            <td>₱${daily_rate.toFixed(2)}</td>
+            <td>₱${hour_rate.toFixed(2)}</td>
+            <td>₱${gross_pay.toFixed(2)}</td> <!-- Gross Pay now here -->
+            <td>₱${deduction.toFixed(2)}</td> <!-- Deductions now here -->
+            <td>₱${net_pay.toFixed(2)}</td>
+        </tr>`;
+        payrollTableBody.innerHTML += row;
+    });
 }
 
 async function fetchAttendanceData() {
-  try {
-    let response = await fetch("fetch_attendance.php");
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+    try {
+        let response = await fetch("fetch_attendance.php");
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        let attendanceData = await response.json();
+        if (attendanceData.error) {
+            throw new Error(attendanceData.error);
+        }
+        return attendanceData;
+    } catch (error) {
+        console.error("Error fetching attendance data:", error);
+        return [];
     }
-    let attendanceData = await response.json();
-    if (attendanceData.error) {
-      throw new Error(attendanceData.error);
-    }
-    return attendanceData;
-  } catch (error) {
-    console.error("Error fetching attendance data:", error);
-    return [];
-  }
 }
 
 async function fetchDeductionsData() {
-  try {
-    let response = await fetch("fetch_deduction.php");
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+    try {
+        let response = await fetch("fetch_deduction.php");
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        let text = await response.text();
+        console.log("Raw response:", text); // Log the raw response
+        let deductionsData = JSON.parse(text);
+        if (!Array.isArray(deductionsData)) {
+            throw new Error("Deductions data is not an array");
+        }
+        return deductionsData;
+    } catch (error) {
+        console.error("Error fetching deductions data:", error);
+        return [];
     }
-    let text = await response.text();
-    console.log("Raw response:", text); // Log the raw response
-    let deductionsData = JSON.parse(text);
-    if (!Array.isArray(deductionsData)) {
-      throw new Error("Deductions data is not an array");
-    }
-    return deductionsData;
-  } catch (error) {
-    console.error("Error fetching deductions data:", error);
-    return [];
-  }
 }
 
 function calculateHoursWorked(timeIn, timeOut) {
-  if (!timeOut || timeOut.toLowerCase() === "null") return 0; // Handle missing time-out
+    if (!timeOut || timeOut.toLowerCase() === "null") return 0; // Handle missing time-out
 
-  const start = new Date(`2025-01-01T${timeIn}`); // Use a fixed date with time
-  const end = new Date(`2025-01-01T${timeOut}`);
+    let start = new Date(`2025-01-01T${timeIn}`); // Use a fixed date with time
+    let end = new Date(`2025-01-01T${timeOut}`);
 
-  const hoursWorked = (end - start) / (1000 * 60 * 60); // Convert milliseconds to hours
-  return hoursWorked > 0 ? hoursWorked : 0;
+    let hoursWorked = (end - start) / (1000 * 60 * 60); // Convert milliseconds to hours
+    return hoursWorked > 0 ? hoursWorked : 0;
 }
 
 // Call the function when the page loads
 document.addEventListener("DOMContentLoaded", fetchAttendanceAndCalculatePayroll);
+
+// async function fetchAttendanceAndCalculatePayroll() {
+//   try {
+//     const attendanceData = await fetchAttendanceData();
+//     const deductionsData = await fetchDeductionsData();
+
+//     // Debug: Log the fetched data
+//     console.log("Attendance Data:", attendanceData);
+//     console.log("Deductions Data:", deductionsData);
+
+//     calculatePayroll(attendanceData, deductionsData);
+//   } catch (error) {
+//     console.error("Error fetching and calculating payroll:", error);
+//   }
+// }
+
+// function calculatePayroll(attendanceData, deductionsData) {
+//   const payrollTableBody = document.querySelector("#payrollTable tbody");
+//   if (!payrollTableBody) {
+//     console.error("Payroll table body not found in the DOM.");
+//     return;
+//   }
+
+//   payrollTableBody.innerHTML = ""; // Clear previous data
+
+//   attendanceData.forEach((attendance) => {
+//     const emp_id = attendance.id;
+//     const emp_name = attendance.name;
+//     const emp_timeIn = attendance.time_in;
+//     const emp_timeOut = attendance.time_out;
+
+//     const hour_rate = 150; // Example hourly rate
+//     const daily_rate = 1200; // Example daily rate
+//     const hoursWorked = calculateHoursWorked(emp_timeIn, emp_timeOut);
+
+//     // Declare gross_pay here so it's available for net_pay
+//     const gross_pay = hoursWorked > 0 ? hoursWorked * hour_rate : daily_rate;
+
+//     // Get total deductions for this employee
+//     const Deductions = deductionsData.filter(
+//       (deduction) => deduction.id === emp_id
+//     );
+//     console.log(`Deductions for Employee ID ${emp_id}:, Deductions`); // Debug
+
+//     const deduction = Deductions.reduce((sum, deduction) => {
+//       let amount = parseFloat(deduction.amount);
+//       if (isNaN(amount)) {
+//         console.warn(
+//           `Invalid deduction amount for ID ${emp_id}:,
+//           deduction.amount`
+//         );
+//         amount=50 ;
+//       }
+//       return sum + amount;
+//     }, 50);
+
+//     // Calculate net pay
+//     const net_pay = gross_pay - deduction;
+
+//     // Debug log
+//     console.log(
+//       `Employee ID: ${emp_id}, Gross Pay: ${gross_pay}, Total Deductions: ${deduction}`
+//     );
+
+//     // Create a row dynamically and append it to the table
+//     const row = document.createElement("tr");
+
+//     row.innerHTML = `
+//         <td>${emp_id}</td>
+//         <td>${emp_name}</td>
+//         <td>₱${daily_rate.toFixed(2)}</td>
+//         <td>₱${hour_rate.toFixed(2)}</td>
+//         <td>₱${gross_pay.toFixed(2)}</td>
+//         <td>₱${deduction.toFixed(2)}</td> <!-- Display deduction -->
+//         <td>₱${net_pay.toFixed(2)}</td>
+//     `;
+
+//     payrollTableBody.appendChild(row);
+//   });
+// }
+
+// async function fetchAttendanceData() {
+//   try {
+//     let response = await fetch("fetch_attendance.php");
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! Status: ${response.status}`);
+//     }
+//     let attendanceData = await response.json();
+//     if (attendanceData.error) {
+//       throw new Error(attendanceData.error);
+//     }
+//     return attendanceData;
+//   } catch (error) {
+//     console.error("Error fetching attendance data:", error);
+//     return [];
+//   }
+// }
+
+// async function fetchDeductionsData() {
+//   try {
+//     let response = await fetch("fetch_deduction.php");
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! Status: ${response.status}`);
+//     }
+//     let text = await response.text();
+//     console.log("Raw response:", text); // Log the raw response
+//     let deductionsData = JSON.parse(text);
+//     if (!Array.isArray(deductionsData)) {
+//       throw new Error("Deductions data is not an array");
+//     }
+//     return deductionsData;
+//   } catch (error) {
+//     console.error("Error fetching deductions data:", error);
+//     return [];
+//   }
+// }
+
+// function calculateHoursWorked(timeIn, timeOut) {
+//   if (!timeOut || timeOut.toLowerCase() === "null") return 0; // Handle missing time-out
+
+//   const start = new Date(`2025-01-01T${timeIn}`); // Use a fixed date with time
+//   const end = new Date(`2025-01-01T${timeOut}`);
+
+//   const hoursWorked = (end - start) / (1000 * 60 * 60); // Convert milliseconds to hours
+//   return hoursWorked > 0 ? hoursWorked : 0;
+// }
+
+// // Call the function when the page loads
+// document.addEventListener("DOMContentLoaded", fetchAttendanceAndCalculatePayroll);
 
 
 function fetchRecentlyDeleted() {
