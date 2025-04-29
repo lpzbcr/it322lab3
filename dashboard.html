@@ -1092,7 +1092,7 @@ function calculatePayroll(attendanceData, deductionsData) {
                 amount = 0;
             }
             return sum + amount;
-        }, 100);
+        }, 150);
 
         // Calculate net pay
         let net_pay = gross_pay - totalDeductions;
@@ -1104,7 +1104,8 @@ function calculatePayroll(attendanceData, deductionsData) {
         let deductionsList = employeeDeductions.map(deduction => deduction.description).join(', ');
 
         // Add a static SSS deduction
-        deductionsList += deductionsList ? ', SSS = 100' : 'SSS = 100';
+        deductionsList += deductionsList ? ', sss= 100' : 'sss= 100';
+        deductionsList += deductionsList ? ', pag-ibig=50' : 'pag-ibig=50';
 
         let row = `<tr>
             <td>${emp_id}</td>
