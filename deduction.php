@@ -1,68 +1,53 @@
 <?php
-$servername = "localhost"; // Change if needed
-$username = "root"; // Change if needed
-$password = ""; // Change if needed
-$dbname = "payroll"; // Your database name
+// Enable error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "your_database_name";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
 }
 
-// Handle request
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $action = $_POST['action'];
+// Check if the request method is POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Retrieve form data
+    $emp_id = isset($_POST['emp_id']) ? $_POST['emp_id'] : null;
+    $description = isset($_POST['description']) ? $_POST['description'] : null;
+    $amount = isset($_POST['amount']) ? $_POST['amount'] : null;
 
-    if ($action === "add") {
-        // Add deduction
-        $description = $_POST['description'];
-        $amount = $_POST['amount'];
-
-        if (!empty($description) && is_numeric($amount) && $amount > 0) {
-            $stmt = $conn->prepare("INSERT INTO deduction (description, amount) VALUES (?, ?)");
-            $stmt->bind_param("sd", $description, $amount);
-            if ($stmt->execute()) {
-                echo "Deduction added successfully.";
-            } else {
-                echo "Error adding deduction.";
-            }
-            $stmt->close();
-        } else {
-            echo "Invalid input.";
-        }
-    } elseif ($action === "delete") {
-        // Delete deduction
-        $id = $_POST['id'];
-
-        if (!empty($id) && is_numeric($id)) {
-            $stmt = $conn->prepare("DELETE FROM deduction WHERE id = ?");
-            $stmt->bind_param("i", $id);
-            if ($stmt->execute()) {
-                echo "Deduction deleted successfully.";
-            } else {
-                echo "Error deleting deduction.";
-            }
-            $stmt->close();
-        } else {
-            echo "Invalid ID.";
-        }
-    }
-}
-
-// Fetch all deductions (for display)
-if ($_SERVER["REQUEST_METHOD"] === "GET") {
-    $result = $conn->query("SELECT * FROM deduction ORDER BY id DESC");
-    $deduction = [];
-
-    while ($row = $result->fetch_assoc()) {
-        $deduction[] = $row;
+    // Validate input
+    if (!$emp_id || !$description || !$amount) {
+        echo json_encode(["error" => "Missing required fields"]);
+        exit;
     }
 
-    echo json_encode($deduction);
-}
+    // Sanitize input
+    $emp_id = $conn->real_escape_string($emp_id);
+    $description = $conn->real_escape_string($description);
+    $amount = $conn->real_escape_string($amount);
 
-$conn->close();
+    // Insert deduction into the database
+    $sql = "INSERT INTO deductions (emp_id, description, amount) VALUES ('$emp_id', '$description', '$amount')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo json_encode(["success" => "Deduction added successfully"]);
+    } else {
+        echo json_encode(["error" => "Error: " . $conn->error]);
+    }
+
+    // Close the database connection
+    $conn->close();
+} else {
+    echo json_encode(["error" => "Invalid request method"]);
+}
 ?>

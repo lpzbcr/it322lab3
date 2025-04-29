@@ -18,7 +18,7 @@ if (isset( $_POST['description'], $_POST['amount'])) {
     $amount = $conn->real_escape_string($_POST['amount']);
     
     // INSERT into employees table
-    $sql = "INSERT INTO deduction ( description, amount) VALUES ( '$description', '$amount')";
+    $sql = "INSERT INTO deductions ( description, amount) VALUES ( '$description', '$amount')";
     
     if ($conn->query($sql) === TRUE) {
         echo "Deduction added successfully!";

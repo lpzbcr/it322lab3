@@ -222,7 +222,7 @@
             </a>
 
             <a href="#" onclick="showSection('recentlyDeleted')">
-                <i class="fa fa-trash-restore"></i> Recently Deleted
+                <i class="fa fa-trash-restore"></i> Archive
             
             <a href="#" id="logoutBtn">
                 <i class="fa-solid fa-right-from-bracket"></i> Log Out
@@ -311,31 +311,25 @@
             <button id="print-btn" onclick="printPayroll()">🖨 Print Payroll</button>
         
             <table id="payrollTable">
-            
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
+                        <th>Employee ID</th>
+                        <th>Basic Pay</th>
                         <th>Daily Rate</th>
-                        <th>Hour Rate</th>
-                        <th>Gross</th>
-                        <th>Deductions</th>
+                        <th>Hourly Rate</th>
+                        <th>Gross Pay</th>
+                        <th>Deduction</th>
+                        <th>Total Deduction</th>
                         <th>Net Pay</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                      
-                    </tr>
-                    <tr>
-                      
-                    </tr>
-                    <tr>
-                        
-                    </tr>
+                    <!-- Payroll records will be inserted here -->
                 </tbody>
             </table>
         </div>
+        
 
 
         
@@ -410,7 +404,7 @@
 </div>
 
     <div id="deductions" class="content">
-        <h1>Deductions</h1>
+        <h1>Total Deductions</h1>
         <button class="btn-new" onclick="openDeductionForm()">+ Add Deduction</button>
     
         <!-- Deduction Form Modal -->
@@ -855,7 +849,7 @@ fetch("payroll.php")
     // Add the header content
     let headerContent = `
         <div style="text-align: center; margin-bottom: 20px; margin-left: 10px;">
-            <img src="IMG_2236.jpeg" alt="Bohol Island State University" style="width: 1000px;">
+            <img src="img337.png">
 
         </div>
     `;
@@ -903,7 +897,7 @@ function printPayroll() {
     // Define the header content
     let headerContent = `
         <div style="text-align: center; margin-bottom: 20px; margin-left: 10px;">
-            <img src="IMG_2236.jpeg" alt="Bohol Island State University" style="width: 1000px;">
+            <img src="img337.png">
         </div>
     `;
 
@@ -1049,6 +1043,7 @@ function deleteDeduction(id) {
     .catch(error => alert("Fetch error: " + error));
 }
 
+// Function to fetch and calculate payroll data
 async function fetchAttendanceAndCalculatePayroll() {
     try {
         let attendanceData = await fetchAttendanceData();
@@ -1064,6 +1059,7 @@ async function fetchAttendanceAndCalculatePayroll() {
     }
 }
 
+// Function to calculate payroll
 function calculatePayroll(attendanceData, deductionsData) {
     let payrollTableBody = document.querySelector("#payrollTable tbody");
     if (!payrollTableBody) {
@@ -1078,44 +1074,54 @@ function calculatePayroll(attendanceData, deductionsData) {
         let emp_timeIn = attendance.time_in;
         let emp_timeOut = attendance.time_out;
 
-        let hoursWorked = calculateHoursWorked(emp_timeIn, emp_timeOut);
+        let basic_pay = 30000; // Example basic pay
         let hour_rate = 150; // Example hourly rate
         let daily_rate = 1200; // Example daily rate
 
-        // Calculate gross pay based on hours worked or daily rate
+        let hoursWorked = calculateHoursWorked(emp_timeIn, emp_timeOut);
         let gross_pay = hoursWorked > 0 ? hoursWorked * hour_rate : daily_rate;
 
         // Calculate total deductions for the employee
-        let employeeDeductions = deductionsData.filter(deduction => deduction.id === emp_id);
+        let employeeDeductions = deductionsData.filter(deduction => deduction.emp_id === emp_id);
         console.log(`Deductions for Employee ID ${emp_id}:`, employeeDeductions); // Debug: Log deductions for the employee
 
-        let deduction = employeeDeductions.reduce((sum, deduction) => {
+        let totalDeductions = employeeDeductions.reduce((sum, deduction) => {
             let amount = parseFloat(deduction.amount);
             if (isNaN(amount)) {
                 console.warn(`Invalid deduction amount for ID ${emp_id}:`, deduction.amount);
                 amount = 0;
             }
             return sum + amount;
-        }, 0);
+        }, 100);
+
+        // Calculate net pay
+        let net_pay = gross_pay - totalDeductions;
 
         // Debug: Log the calculated values
-        console.log(`Employee ID: ${emp_id}, Gross Pay: ${gross_pay}, Total Deductions: ${deduction}`);
+        console.log(`Employee ID: ${emp_id}, Gross Pay: ${gross_pay}, Total Deductions: ${totalDeductions}, Net Pay: ${net_pay}`);
 
-        let net_pay = gross_pay - deduction;
+        // Create a row dynamically and append it to the table
+        let deductionsList = employeeDeductions.map(deduction => deduction.description).join(', ');
+
+        // Add a static SSS deduction
+        deductionsList += deductionsList ? ', SSS = 100' : 'SSS = 100';
 
         let row = `<tr>
             <td>${emp_id}</td>
-            <td>${emp_name}</td>
+            <td>${emp_id}</td>
+            <td>₱${basic_pay.toFixed(2)}</td>
             <td>₱${daily_rate.toFixed(2)}</td>
             <td>₱${hour_rate.toFixed(2)}</td>
-            <td>₱${gross_pay.toFixed(2)}</td> <!-- Gross Pay now here -->
-            <td>₱${deduction.toFixed(2)}</td> <!-- Deductions now here -->
+            <td>₱${gross_pay.toFixed(2)}</td>
+            <td>${deductionsList}</td>
+            <td>₱${totalDeductions.toFixed(2)}</td>
             <td>₱${net_pay.toFixed(2)}</td>
         </tr>`;
         payrollTableBody.innerHTML += row;
     });
 }
 
+// Function to fetch attendance data
 async function fetchAttendanceData() {
     try {
         let response = await fetch("fetch_attendance.php");
@@ -1133,6 +1139,7 @@ async function fetchAttendanceData() {
     }
 }
 
+// Function to fetch deductions data
 async function fetchDeductionsData() {
     try {
         let response = await fetch("fetch_deduction.php");
@@ -1142,8 +1149,8 @@ async function fetchDeductionsData() {
         let text = await response.text();
         console.log("Raw response:", text); // Log the raw response
         let deductionsData = JSON.parse(text);
-        if (!Array.isArray(deductionsData)) {
-            throw new Error("Deductions data is not an array");
+        if (deductionsData.error) {
+            throw new Error(deductionsData.error);
         }
         return deductionsData;
     } catch (error) {
@@ -1152,6 +1159,7 @@ async function fetchDeductionsData() {
     }
 }
 
+// Function to calculate hours worked
 function calculateHoursWorked(timeIn, timeOut) {
     if (!timeOut || timeOut.toLowerCase() === "null") return 0; // Handle missing time-out
 
@@ -1164,6 +1172,58 @@ function calculateHoursWorked(timeIn, timeOut) {
 
 // Call the function when the page loads
 document.addEventListener("DOMContentLoaded", fetchAttendanceAndCalculatePayroll);
+
+// Function to print payroll
+function printPayroll() {
+    // Select the table element with the class 'payroll-list'
+    let table = document.querySelector("#payrollTable");
+
+    // Check if the table element exists
+    if (!table) {
+        console.error("Payroll table not found in the DOM.");
+        return;
+    }
+
+    // Get the outer HTML of the table
+    let tableHTML = table.outerHTML;
+
+    // Open a new print window
+    let printWindow = window.open("", "", "width=800,height=600");
+
+    // Define the header content
+    let headerContent = `
+        <div style="text-align: center; margin-bottom: 20px; margin-left: 10px;">
+            <img src="IMG_2236.jpeg" alt="Bohol Island State University" style="width: 1000px;">
+        </div>
+    `;
+
+    // Write the HTML content to the print window
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print Payroll</title>
+                <style>
+                    body { font-family: Arial, sans-serif; text-align: center; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th, td { border: 1px solid black; padding: 8px; text-align: center; }
+                    th { background-color: #f2f2f2; }
+                </style>
+            </head>
+            <body>
+                ${headerContent}
+                <h2>Payroll Report</h2>
+                ${tableHTML}
+                <script>
+                    setTimeout(() => { window.print(); window.close(); }, 500);
+                <\/script>
+            </body>
+        </html>
+    `);
+
+    // Close the print window after printing
+    printWindow.document.close();
+}
+
 
 // async function fetchAttendanceAndCalculatePayroll() {
 //   try {

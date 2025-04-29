@@ -17,7 +17,7 @@ if (isset($_POST['id'])) {
     $id = intval($_POST['id']); // Ensure the ID is an integer
 
     // Prepare and bind
-    $stmt = $conn->prepare("DELETE FROM deduction WHERE id = ?");
+    $stmt = $conn->prepare("DELETE FROM deductions WHERE id = ?");
     $stmt->bind_param("i", $id);
 
     // Execute the statement
