@@ -849,8 +849,7 @@ fetch("payroll.php")
     // Add the header content
     let headerContent = `
         <div style="text-align: center; margin-bottom: 20px; margin-left: 10px;">
-            <img src="img337.png">
-
+            <img src="img337.png" alt="Header Image">
         </div>
     `;
 
@@ -876,57 +875,6 @@ fetch("payroll.php")
     `);
 }
 
-
-
-function printPayroll() {
-    // Select the table element with the class 'payroll-list'
-    let table = document.querySelector("#payrollTable");
-
-    // Check if the table element exists
-    if (!table) {
-        console.error("Payroll table not found in the DOM.");
-        return;
-    }
-
-    // Get the outer HTML of the table
-    let tableHTML = table.outerHTML;
-
-    // Open a new print window
-    let printWindow = window.open("", "", "width=800,height=600");
-
-    // Define the header content
-    let headerContent = `
-        <div style="text-align: center; margin-bottom: 20px; margin-left: 10px;">
-            <img src="img337.png">
-        </div>
-    `;
-
-    // Write the HTML content to the print window
-    printWindow.document.write(`
-        <html>
-            <head>
-                <title>Print Payroll</title>
-                <style>
-                    body { font-family: Arial, sans-serif; text-align: center; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                    th, td { border: 1px solid black; padding: 8px; text-align: center; }
-                    th { background-color: #f2f2f2; }
-                </style>
-            </head>
-            <body>
-                ${headerContent}
-                <h2>Payroll Report</h2>
-                ${tableHTML}
-                <script>
-                    setTimeout(() => { window.print(); window.close(); }, 500);
-                <\/script>
-            </body>
-        </html>
-    `);
-
-    // Close the print window after printing
-    printWindow.document.close();
-}
 
 let deduction = [];
 
@@ -1075,8 +1023,8 @@ function calculatePayroll(attendanceData, deductionsData) {
         let emp_timeOut = attendance.time_out;
 
         let basic_pay = 30000; // Example basic pay
-        let hour_rate = 150; // Example hourly rate
-        let daily_rate = 1200; // Example daily rate
+        let hour_rate = 187.50; // Example hourly rate
+        let daily_rate = 1500; // Example daily rate
 
         let hoursWorked = calculateHoursWorked(emp_timeIn, emp_timeOut);
         let gross_pay = hoursWorked > 0 ? hoursWorked * hour_rate : daily_rate;
@@ -1194,7 +1142,7 @@ function printPayroll() {
     // Define the header content
     let headerContent = `
         <div style="text-align: center; margin-bottom: 20px; margin-left: 10px;">
-            <img src="IMG_2236.jpeg" alt="Bohol Island State University" style="width: 1000px;">
+            <img src="img337.png" alt="Bohol Island State University" style="width: 1000px;">
         </div>
     `;
 
